@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <random>
 #include <chrono>
+#include <string>
 
 class PagedArray {
     public:
@@ -30,7 +31,7 @@ class PagedArray {
 
         void loadPage(size_t pageIndex);
         void unloadPage(size_t pageIndex);
-        size_t getPageINdex (size_t index) const {return index/pageSize;}
+        size_t getPageIndex (size_t index) const {return index/pageSize;}
         size_t getOffset(size_t index) const {return index % pageSize;}
 };
 
