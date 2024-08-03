@@ -1,38 +1,41 @@
 #ifndef PAGEDARRAY_H
 #define PAGEDARRAY_H
 
-#include <iostream>
-#include <fstream>
 #include <vector>
 #include <unordered_map>
-#include <random>
-#include <chrono>
-#include <string>
+#include <array>
+#include <fstream>
 
 class PagedArray {
-    public:
-        PagedArray(const std::string &filePath, size_t pageSize = 4096);
-        ~PagedArray();
+public:
+    PagedArray(const std::string &filePath, size_t pageSize = 1024);
+    ~PagedArray();
+    int& operator[](size_t index);
+    size_t size() const;
 
-        int operator[](size_t index);
-        void set(size_t index, int value);
-        
-        size_t getPageFaults() const { return pageFaults; }
-        size_t getPageHits() const { return pageHits; }
+    void writeToFile(const std::string &outputFilePath);
+    void writeToTextFile(const std::string &outputFilePath); // Nueva función
+    void printStats() const;
 
-    private:
-        size_t pageSize;
-        size_t numPages;
-        std::string filePath;
-        std::vector<int*> pages;
-        std::unordered_map <size_t, int*> pageTable;
-        size_t pageFaults;
-        size_t pageHits;
+private:
+    struct Page {
+        size_t index;
+        std::vector<int> data;
+        bool dirty;
+    };
 
-        void loadPage(size_t pageIndex);
-        void unloadPage(size_t pageIndex);
-        size_t getPageIndex (size_t index) const {return index/pageSize;}
-        size_t getOffset(size_t index) const {return index % pageSize;}
+    std::ifstream inputFile;
+    std::ofstream outputFile;
+    size_t pageSize;
+    size_t numPages;
+    size_t arraySize;
+    std::unordered_map<size_t, Page> pages;
+    std::array<Page*, 4> pageSlots;
+    size_t pageFaults;
+    size_t pageHits;
+
+    Page* loadPage(size_t pageIndex);
+    void unloadPage(Page* page);
 };
 
-#endif
+#endif // PAGEDARRAY_H
