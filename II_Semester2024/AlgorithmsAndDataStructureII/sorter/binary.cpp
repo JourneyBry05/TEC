@@ -1,18 +1,30 @@
+/*
+Code that generates a .bin file with random integers in binary mode
+*/
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
 #include <ctime>
 
-void generateBinaryFile(const std::string &filePath, int numIntegers) {
-    std::ofstream outFile(filePath, std::ios::binary);
+using namespace std;
+
+/*
+The function receives the 'FilePath' where the numbers will be saved, and 
+the 'numIntegers' that will be generated and written to the file
+*/
+void generateBinaryFile(const string &filePath, int numIntegers) {
+    ofstream outFile(filePath, ios::binary);
     if (!outFile) {
-        std::cerr << "Error opening file for writing: " << filePath << std::endl;
+        cerr << "Error opening file for writing: " << filePath << endl;
         return;
     }
+    //Initialize the num generator
+    srand(time(nullptr));
 
-    std::srand(std::time(nullptr));
+    //Iterate 'numIntegers' times to generate and write random numbers to file
     for (int i = 0; i < numIntegers; ++i) {
-        int randomInt = std::rand();
+        int randomInt = rand(); //Generate a random integer
+        //Write the integer as a sequence of bytes
         outFile.write(reinterpret_cast<char*>(&randomInt), sizeof(randomInt));
     }
 
@@ -20,9 +32,9 @@ void generateBinaryFile(const std::string &filePath, int numIntegers) {
 }
 
 int main() {
-    std::string filePath = "input.bin";
-    int numIntegers = 1000; // Modify as needed
+    string filePath = "input.bin"; //filePath will be saved as input.bin
+    int numIntegers = 1000; // How many numbers will be generated
     generateBinaryFile(filePath, numIntegers);
-    std::cout << "Binary file generated: " << filePath << std::endl;
+    cout << "Binary file generated: " << filePath << endl; //If file was created successfully...
     return 0;
 }
