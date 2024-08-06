@@ -1,6 +1,16 @@
-#include "sorters.h"
+/*
+File containing the sorting algorithms to be used using the "PagedArray" class.
+Each function receives a "PagedArray" reference
+*/
+
+#include "sorters.h" //Remember that it includes the sorting functions
 #include <algorithm>
 
+/*
+Void functions that implements the Quick Sort algorithm
+left: first index of the array segment to sort
+right: final index of the array segment to sort
+*/
 void quickSort(PagedArray &arr, int left, int right) {
     int i = left, j = right;
     int pivot = arr[(left + right) / 2];
@@ -18,7 +28,10 @@ void quickSort(PagedArray &arr, int left, int right) {
     if (left < j) quickSort(arr, left, j);
     if (i < right) quickSort(arr, i, right);
 }
-
+/*
+Void functions that implements the Insertion Sort algorithm
+size: size of the array to be sorted
+*/
 void insertionSort(PagedArray &arr, size_t size) {
     for (size_t i = 1; i < size; ++i) {
         int key = arr[i];
@@ -31,6 +44,10 @@ void insertionSort(PagedArray &arr, size_t size) {
     }
 }
 
+/*
+Void functions that implements the Bubble Sort algorithm
+size: size of the array to be sorted
+*/
 void bubbleSort(PagedArray &arr, size_t size) {
     bool swapped;
     for (size_t i = 0; i < size - 1; ++i) {
