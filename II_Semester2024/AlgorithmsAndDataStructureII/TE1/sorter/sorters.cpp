@@ -24,7 +24,7 @@ void quickSort(PagedArray &arr, int left, int right) {
             j--;
         }
     }
-
+    //Recursively calls "quickSort" to sort the segment right or left
     if (left < j) quickSort(arr, left, j);
     if (i < right) quickSort(arr, i, right);
 }
