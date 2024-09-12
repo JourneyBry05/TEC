@@ -2,25 +2,33 @@
 #define MPOINTERGC_H
 
 #include <list>
-#include <thread>
-#include <mutex>
+#include <functional>
 
-class MPointerGC{
+class MPointerGC {
 private:
-    std::list<void*> pointers;
-    std::list<void*> refCounts;
+    std::list<void*> pointers;  // Lista de punteros gestionados
+    std::list<int> refCounts;   // Lista paralela de contadores de referencias
+    std::list<std::function<void(void*)>> deleters;  // Funciones para eliminar punteros del tipo correcto
     static MPointerGC* instance;
-    std::mutex gcMutex;
 
-    MPointerGC(){}
+    MPointerGC() {}  // Constructor privado para Singleton
 
 public:
     static MPointerGC* getInstance();
 
-    void registerPonter(void* ptr);
-    void incrementRef(void* ptr);
-    void decrementRef(void* ptr);
-    void collectGarbage();
-}
+    void registerPointer(void* ptr, std::function<void(void*)> deleter);
 
-#endif
+    void incrementRef(void* ptr);
+
+    void decrementRef(void* ptr);
+
+    void collectGarbage();
+
+    // Plantilla para eliminar punteros del tipo correcto
+    template<typename T>
+    static void deletePointer(void* ptr) {
+        delete static_cast<T*>(ptr);
+    }
+};
+
+#endif // MPOINTERGC_H
