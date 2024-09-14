@@ -22,24 +22,24 @@ template<typename T>
 class LinkedList {
 private:
     MPointer<Node<T>> head;
-    MPointer<Node<T>> tail;
+    MPointer<Node<T>> last;
     int size;
 
 public:
-    LinkedList() : head(nullptr), tail(nullptr), size(0) {}
+    LinkedList() : head(nullptr), last(nullptr), size(0) {}
 
     // Insertar al final de la lista
     void append(T value) {
         MPointer<Node<T>> newNode = MPointer<Node<T>>::New();
         *newNode = Node<T>(value);
         
-        if (tail == nullptr) {
+        if (last == nullptr) {
             head = newNode;
-            tail = newNode;
+            last = newNode;
         } else {
-            (*tail).next = newNode;
-            (*newNode).prev = tail;
-            tail = newNode;
+            (*last).next = newNode;
+            (*newNode).prev = last;
+            last = newNode;
         }
         size++;
     }
