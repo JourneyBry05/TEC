@@ -13,50 +13,50 @@ MPointerGC* MPointerGC::getInstance() {
 void MPointerGC::registerPointer(void* ptr, std::function<void(void*)> deleter) {
     pointers.push_back(ptr);
     refCounts.push_back(1);  // Inicializa el contador de referencias en 1
-    deleters.push_back(deleter);  // Guarda la función deleter para eliminar correctamente
+    deleters.push_back(deleter); 
 }
 
 void MPointerGC::incrementRef(void* ptr) {
-    auto it = std::find(pointers.begin(), pointers.end(), ptr);
-    if (it != pointers.end()) {
-        auto index = std::distance(pointers.begin(), it);
-        auto refIt = std::next(refCounts.begin(), index);
-        (*refIt)++;
+    auto element = std::find(pointers.begin(), pointers.end(), ptr);
+    if (element != pointers.end()) {
+        auto index = std::distance(pointers.begin(), element);
+        auto next = std::next(refCounts.begin(), index);
+        (*next)++;
     }
 }
 
 void MPointerGC::decrementRef(void* ptr) {
-    auto it = std::find(pointers.begin(), pointers.end(), ptr);
-    if (it != pointers.end()) {
-        auto index = std::distance(pointers.begin(), it);
-        auto refIt = std::next(refCounts.begin(), index);
-        auto delIt = std::next(deleters.begin(), index);
-        (*refIt)--;
+    auto element = std::find(pointers.begin(), pointers.end(), ptr);
+    if (element != pointers.end()) {
+        auto index = std::distance(pointers.begin(), element);
+        auto next = std::next(refCounts.begin(), index);
+        auto delElement = std::next(deleters.begin(), index);
+        (*next)--;
 
-        if (*refIt == 0) {
-            (*delIt)(*it);  // Llama al deleter para eliminar el puntero
-            pointers.erase(it);
-            refCounts.erase(refIt);
-            deleters.erase(delIt);
+        if (*next == 0) {
+            (*delElement)(*element);  // Llama al deleter para eliminar el puntero
+            pointers.erase(element);
+            refCounts.erase(next);
+            deleters.erase(delElement);
         }
     }
 }
 
 void MPointerGC::collectGarbage() {
-    auto it = pointers.begin();
-    auto refIt = refCounts.begin();
-    auto delIt = deleters.begin();
+    auto element = pointers.begin();
+    auto next = refCounts.begin();
+    auto delElement = deleters.begin();
 
-    while (it != pointers.end()) {
-        if (*refIt == 0) {
-            (*delIt)(*it);  // Llama a la función deleter para eliminar el puntero
-            it = pointers.erase(it);
-            refIt = refCounts.erase(refIt);
-            delIt = deleters.erase(delIt);
+    while (element != pointers.end()) {
+        if (*next == 0) {
+            (*delElement)(*element);  // Llama a la función deleter para eliminar el puntero
+            element = pointers.erase(element);
+            next = refCounts.erase(next);
+            delElement = deleters.erase(delElement);
         } else {
-            ++it;
-            ++refIt;
-            ++delIt;
+            ++element;
+            ++next;
+            ++delElement;
         }
     }
 }

@@ -9,7 +9,11 @@ private:
     T* ptr; // Puntero interno
 
 public:
-    MPointer() : ptr(nullptr) {} // Constructor
+    // Constructor predeterminado
+    MPointer() : ptr(nullptr) {} 
+
+    // Constructor utilizado en caso de usar nullpoint
+    MPointer(std::nullptr_t) : ptr(nullptr) {}
 
     // Método para crear un nuevo MPointer
     static MPointer<T> New() {
@@ -19,17 +23,23 @@ public:
         return mp;
     }
 
-    // Sobrecarga del operador *
     T& operator*() {
         return *ptr;
     }
 
-    // Sobrecarga del operador &
     T* operator&() {
         return ptr;
     }
 
-    // Operador de asignación para MPointer
+    bool operator==(std::nullptr_t) const {
+        return ptr == nullptr;
+    }
+
+    bool operator!=(std::nullptr_t) const {
+        return ptr != nullptr;
+    }
+
+    //Incrementar o decrementar referencia con MPointerGC
     MPointer<T>& operator=(const MPointer<T>& other) {
         if (this != &other) {
             MPointerGC::getInstance()->decrementRef(ptr);
@@ -51,4 +61,4 @@ public:
     }
 };
 
-#endif // MPOINTER_H
+#endif 

@@ -11,7 +11,7 @@ private:
     std::list<std::function<void(void*)>> deleters;  // Funciones para eliminar punteros del tipo correcto
     static MPointerGC* instance;
 
-    MPointerGC() {}  // Constructor privado para Singleton
+    MPointerGC() {}  
 
 public:
     static MPointerGC* getInstance();
@@ -31,4 +31,4 @@ public:
     }
 };
 
-#endif // MPOINTERGC_H
+#endif 

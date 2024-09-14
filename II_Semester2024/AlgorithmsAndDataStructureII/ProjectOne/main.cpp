@@ -1,42 +1,55 @@
 #include "MPointer.h"
+#include "SortingAlgorithms.h"
 #include <iostream>
 
 int main() {
-    // Prueba 1: MPointer con tipo int
-    std::cout << "Prueba con int:" << std::endl;
-    MPointer<int> pInt = MPointer<int>::New();
-    *pInt = 42;
-    std::cout << "Valor en pInt: " << *pInt << std::endl;
-
-    // Prueba 2: MPointer con tipo float
-    std::cout << "\nPrueba con float:" << std::endl;
-    MPointer<float> pFloat = MPointer<float>::New();
-    *pFloat = 3.14f;
-    std::cout << "Valor en pFloat: " << *pFloat << std::endl;
-
-    // Prueba 3: MPointer con tipo double
-    std::cout << "\nPrueba con double:" << std::endl;
-    MPointer<double> pDouble = MPointer<double>::New();
-    *pDouble = 2.7182818284;
-    std::cout << "Valor en pDouble: " << *pDouble << std::endl;
-
-    // Prueba 4: MPointer con tipo char
-    std::cout << "\nPrueba con char:" << std::endl;
-    MPointer<char> pChar = MPointer<char>::New();
-    *pChar = 'A';
-    std::cout << "Valor en pChar: " << *pChar << std::endl;
-
-    // Prueba de asignación de punteros
+    MPointer<int> pInt1 = MPointer<int>::New();
+    *pInt1 = 42;
     MPointer<int> pInt2 = MPointer<int>::New();
-    *pInt2 = 100;
-    std::cout << "\nValor en pInt2 antes de la asignación: " << *pInt2 << std::endl;
+    *pInt2 = 12;
+    MPointer<int> pInt3 = MPointer<int>::New();
+    *pInt3 = 35;
+    MPointer<int> pInt4 = MPointer<int>::New();
+    *pInt4 = 7;
+    MPointer<int> pInt5 = MPointer<int>::New();
+    *pInt5 = 15;
 
-    // Asignar pInt a pInt2
-    pInt2 = pInt;
-    std::cout << "Valor en pInt2 después de la asignación: " << *pInt2 << std::endl;
+    
+    // Crear un arreglo de MPointer<int>
+    MPointer<int> arr[] = { pInt1, pInt2, pInt3, pInt4, pInt5 };
 
-    // Colectar basura manualmente
-    MPointerGC::getInstance()->collectGarbage();
+    // Imprimir la lista original
+    std::cout << "Lista original: ";
+    for (int i = 0; i < 5; i++) {
+        std::cout << *arr[i] << " ";  
+    }
+    std::cout << std::endl;
+
+    // Aplicar BubbleSort
+    bubbleSort(arr, 5);
+    std::cout << "Lista ordenada con BubbleSort: ";
+    for (int i = 0; i < 5; i++) {
+        std::cout << *arr[i] << " ";
+    }
+    std::cout << std::endl;
+
+    // Restablecer valores y aplicar InsertionSort
+    *pInt1 = 42; *pInt2 = 12; *pInt3 = 35; *pInt4 = 7; *pInt5 = 15;
+    insertionSort(arr, 5);
+    std::cout << "Lista ordenada con InsertionSort: ";
+    for (int i = 0; i < 5; i++) {
+        std::cout << *arr[i] << " ";
+    }
+    std::cout << std::endl;
+
+    // Restablecer valores y aplicar QuickSort
+    *pInt1 = 42; *pInt2 = 12; *pInt3 = 35; *pInt4 = 7; *pInt5 = 15;
+    quickSort(arr, 0, 4);
+    std::cout << "Lista ordenada con QuickSort: ";
+    for (int i = 0; i < 5; i++) {
+        std::cout << *arr[i] << " ";
+    }
+    std::cout << std::endl;
 
     return 0;
 }
